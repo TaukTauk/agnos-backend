@@ -1,0 +1,538 @@
+{
+  "info": {
+    "name": "Agnos Backend API",
+    "description": "Hospital Middleware System API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "your-secret-api-key-here",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Staff",
+      "item": [
+        {
+          "name": "Create Staff",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"new.staff\",\n    \"password\": \"Password123!\",\n    \"hospital_code\": \"HOSPITAL_A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/create",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Staff - Weak Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"new.staff\",\n    \"password\": \"weak\",\n    \"hospital_code\": \"HOSPITAL_A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/create",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Staff - Hospital Not Found",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"new.staff\",\n    \"password\": \"Password123!\",\n    \"hospital_code\": \"INVALID_HOSPITAL\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/create",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Hospital A",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.success).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"staff.hospital.a\",\n    \"password\": \"password\",\n    \"hospital_code\": \"HOSPITAL_A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/login",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Hospital B",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"staff.hospital.b\",\n    \"password\": \"password\",\n    \"hospital_code\": \"HOSPITAL_B\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/login",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Wrong Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"staff.hospital.a\",\n    \"password\": \"wrongpassword\",\n    \"hospital_code\": \"HOSPITAL_A\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/login",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"staff.hospital.a\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/staff/login",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/staff/logout",
+              "host": ["{{base_url}}"],
+              "path": ["staff", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patient",
+      "item": [
+        {
+          "name": "Search - All Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By First Name (EN)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?first_name=Somchai&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "first_name", "value": "Somchai" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By First Name (TH)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?first_name=สมชาย&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "first_name", "value": "สมชาย" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By National ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?national_id=1100100011001&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "national_id", "value": "1100100011001" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By Passport ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?passport_id=PA123456&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "passport_id", "value": "PA123456" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By Email",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?email=somchai@email.com&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "email", "value": "somchai@email.com" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By Phone Number",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?phone_number=0811111111&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "phone_number", "value": "0811111111" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - By Date of Birth",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?date_of_birth=1990-05-15&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "date_of_birth", "value": "1990-05-15" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - Multiple Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?first_name=Somchai&last_name=Jaidee&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "first_name", "value": "Somchai" },
+                { "key": "last_name", "value": "Jaidee" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - No Results",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?first_name=NonExistentPatient&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "first_name", "value": "NonExistentPatient" },
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - No JWT (Unauthorized)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/search?page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search - No API Key (Unauthorized)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/patient/search?page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "search"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "page_size", "value": "10" }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
