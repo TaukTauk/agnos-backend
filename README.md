@@ -76,7 +76,7 @@ agnos-backend/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/TaukTauk/agnos-backend.git
 cd agnos-backend
 ```
 
@@ -91,7 +91,7 @@ Edit `.env` with your values — see [Environment Variables](#environment-variab
 ### 3. Start all services
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 This starts:
@@ -103,7 +103,7 @@ This starts:
 
 ```bash
 docker compose down -v
-docker compose up --build
+docker compose up --build -d
 ```
 
 The `-v` flag removes the database volume, causing the seed to re-run.
@@ -187,19 +187,19 @@ go test ./tests/... -v -cover
 
 | Test | Type |
 |---|---|
-| `TestCreateStaff_Success` | ✅ Positive |
-| `TestCreateStaff_HospitalNotFound` | ❌ Negative |
-| `TestCreateStaff_DuplicateUsername` | ❌ Negative |
-| `TestCreateStaff_WeakPassword` | ❌ Negative |
-| `TestLogin_Success` | ✅ Positive |
-| `TestLogin_HospitalNotFound` | ❌ Negative |
-| `TestLogin_StaffNotFound` | ❌ Negative |
-| `TestLogin_WrongPassword` | ❌ Negative |
-| `TestSearchPatient_Success` | ✅ Positive |
-| `TestSearchPatient_NoResults` | ❌ Negative |
-| `TestSearchPatient_DefaultPagination` | ✅ Edge case |
-| `TestSearchPatient_RepositoryError` | ❌ Negative |
-| `TestSearchPatient_PaginationCalculation` | ✅ Edge case |
+| `TestCreateStaff_Success` | Positive |
+| `TestCreateStaff_HospitalNotFound` | Negative |
+| `TestCreateStaff_DuplicateUsername` | Negative |
+| `TestCreateStaff_WeakPassword` | Negative |
+| `TestLogin_Success` | Positive |
+| `TestLogin_HospitalNotFound` | Negative |
+| `TestLogin_StaffNotFound` | Negative |
+| `TestLogin_WrongPassword` | Negative |
+| `TestSearchPatient_Success` | Positive |
+| `TestSearchPatient_NoResults` | Negative |
+| `TestSearchPatient_DefaultPagination` | Edge case |
+| `TestSearchPatient_RepositoryError` | Negative |
+| `TestSearchPatient_PaginationCalculation` | Edge case |
 
 ---
 
@@ -208,8 +208,9 @@ go test ./tests/... -v -cover
 Import `agnos-backend.postman_collection.json` into Postman.
 
 1. Set the `api_key` collection variable to match your `.env` `API_KEY`
-2. Run **Login** first — JWT cookie is saved automatically
-3. All protected requests will use the cookie automatically
+2. Set `base_url` to `http://localhost` for `nginx` (better for production) or `http://localhost:8080` to go directly to `Go app`
+3. Run **Login** first — JWT cookie is saved automatically
+4. All protected requests will use the cookie automatically
 
 ---
 
